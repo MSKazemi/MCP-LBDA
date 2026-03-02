@@ -18,7 +18,7 @@ A self-paced, beginner-to-intermediate course for building MCP servers with **Fa
 
 ```bash
 # Clone and enter
-cd mcp-course
+cd MCP-LBDA
 
 # Install
 pip install -r requirements.txt
@@ -51,7 +51,7 @@ Follow this order for best results:
 ## 📁 Repository Structure
 
 ```
-mcp-course/
+MCP-LBDA/
 ├── README.md           ← You are here
 ├── requirements.txt
 ├── docs/               ← Concepts before code
