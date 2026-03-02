@@ -1,7 +1,6 @@
 """Minimal MCP client – FastMCP Client, in-memory (same process)."""
 import asyncio
 from fastmcp import Client
-
 from server import mcp
 
 client = Client(mcp)

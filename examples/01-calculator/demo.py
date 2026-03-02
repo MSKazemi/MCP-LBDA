@@ -2,9 +2,7 @@
 import asyncio
 import re
 from typing import NamedTuple
-
 from fastmcp import Client
-
 from server import mcp
 
 client = Client(mcp)

@@ -34,6 +34,8 @@ python examples/01-calculator/server.py
 
 Connect a client (e.g., Cursor, Claude Desktop) and try the `add` tool. You're running MCP.
 
+**Use in VS Code or Cursor Chat:** See [docs/05-ide-setup.md](docs/05-ide-setup.md) – add the MCP server to your IDE and ask the AI to use the calculator tools.
+
 ### Test with the included client
 
 Each example has a `client.py` alongside `server.py`:
@@ -71,7 +73,8 @@ Follow this order for best results:
 | 5 | Read | [`docs/03-architecture.md`](docs/03-architecture.md) – How the pieces fit together |
 | 6 | Run | [`examples/04-sqlite-tool`](examples/04-sqlite-tool) – Database |
 | 7 | Read | [`docs/04-fastmcp-explained.md`](docs/04-fastmcp-explained.md) – What FastMCP hides |
-| 8 | Practice | [`exercises/`](exercises/) – Build your own tools |
+| 8 | Read | [`docs/05-ide-setup.md`](docs/05-ide-setup.md) – Add MCP to VS Code / Cursor, use in Chat |
+| 9 | Practice | [`exercises/`](exercises/) – Build your own tools |
 
 ---
 
@@ -85,7 +88,9 @@ MCP-LBDA/
 │   ├── 03-file-reader/       ← File I/O
 │   └── 04-sqlite-tool/       ← Database
 ├── docs/
+│   └── 05-ide-setup.md       ← Add MCP to VS Code/Cursor
 ├── exercises/
+├── mcp.json.example         ← Sample config for IDE
 └── ...
 ```
 

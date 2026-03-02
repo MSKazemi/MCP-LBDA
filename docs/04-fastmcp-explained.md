@@ -55,4 +55,4 @@ For learning and most projects, the pros outweigh the cons.
 
 The MCP spec is open; you can implement servers in any language.
 
-**Next:** Run the examples, then try the [exercises](../exercises/).
+**Next:** [05 – IDE Setup](05-ide-setup.md) – Add MCP to VS Code/Cursor and use in Chat. Then try the [exercises](../exercises/).
