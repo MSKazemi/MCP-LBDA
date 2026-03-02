@@ -1,32 +1,30 @@
-# Example 01 – Calculator
+# Example 01 – Calculator (Minimal)
 
-Your first MCP server: two simple tools.
+Smallest MCP example: FastMCP server + FastMCP Client. In-memory (same process).
 
-## What This Demonstrates
+## Structure
 
-- Defining tools with `@mcp.tool()`
-- Type hints → automatic schema
-- Docstring → tool description
+| File | Role |
+|------|------|
+| `server.py` | FastMCP server – 2 tools |
+| `client.py` | FastMCP Client – in-memory |
+| `demo.py` | Fake LLM loop – `add 4 and 5` → result |
 
 ## How to Run
 
-```bash
-python server.py
-```
-
-Or with uvicorn (if using SSE transport):
+From repo root (venv active):
 
 ```bash
-uvicorn server:mcp --reload
+python examples/01-calculator/server.py   # Server standalone
+python examples/01-calculator/client.py   # Client (in-memory) → add(3,7)=10
+python examples/01-calculator/demo.py     # Interactive fake LLM
 ```
 
 ## What to Observe
 
-1. The server starts and waits for connections.
-2. Connect a client (e.g., Cursor MCP, Claude Desktop).
-3. Call `add` with two integers – you get their sum.
-4. Call `subtract` – you get the difference.
+- **client.py** uses `Client(mcp)` – same process, no subprocess
+- **demo.py** parses "add 4 and 5" → tool call → result
 
 ## Next
 
-Try [Example 02 – File Reader](../02-file-reader/) for interaction with the environment.
+[02-calculator-advanced](../02-calculator-advanced/) – same domain, more features (STDIO, resources, prompts).

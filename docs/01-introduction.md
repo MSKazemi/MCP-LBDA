@@ -58,4 +58,21 @@ User → Model → Tool Call → MCP Server → Result → Model → User
 - Basic Python is enough
 - We use **FastMCP** – a simple framework that hides the protocol details
 
+## Both Sides Matter
+
+MCP has two sides:
+
+| Side | What you use | What it does |
+|------|--------------|--------------|
+| **Server** | FastMCP | Exposes tools, resources, prompts |
+| **Client** | MCP SDK (`mcp`) | Connects to servers, calls tools |
+
+This course shows **both**. Server examples use FastMCP; client examples use the MCP SDK.
+
+## Client Options
+
+- **Cursor** or **Claude Desktop** – full LLM integration
+- **FastMCP Client** – each example has `client.py` using `fastmcp.Client`
+- **`examples/01-calculator/demo.py`** – full loop with simulated LLM
+
 **Next:** [02 – Core Concepts](02-core-concepts.md)

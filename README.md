@@ -20,7 +20,12 @@ A self-paced, beginner-to-intermediate course for building MCP servers with **Fa
 # Clone and enter
 cd MCP-LBDA
 
-# Install
+# Create and activate virtual environment
+python3 -m venv .venv       # or: python -m venv .venv
+source .venv/bin/activate   # Linux/macOS
+# .venv\Scripts\activate   # Windows
+
+# Install dependencies
 pip install -r requirements.txt
 
 # Run your first MCP server
@@ -28,6 +33,26 @@ python examples/01-calculator/server.py
 ```
 
 Connect a client (e.g., Cursor, Claude Desktop) and try the `add` tool. You're running MCP.
+
+### Test with the included client
+
+Each example has a `client.py` alongside `server.py`:
+
+```bash
+python examples/01-calculator/client.py
+```
+
+Expected: `add(3, 7) => 10`
+
+### Full teaching demo (Fake LLM loop)
+
+See the complete loop – User → Fake LLM → Client → Server → Result:
+
+```bash
+python examples/01-calculator/demo.py
+```
+
+Try: `add 4 and 5` | `subtract 10 3` | `quit`
 
 ---
 
@@ -38,11 +63,13 @@ Follow this order for best results:
 | # | Step | What to do |
 |---|------|------------|
 | 1 | Read | [`docs/01-introduction.md`](docs/01-introduction.md) – What problem does MCP solve? |
-| 2 | Run | [`examples/01-calculator`](examples/01-calculator) – Your first tool |
+| 2 | Run | [`examples/01-calculator`](examples/01-calculator) – Server + client |
+| 2b | Demo | [`examples/01-calculator/demo.py`](examples/01-calculator/demo.py) – Full loop (fake LLM) |
 | 3 | Read | [`docs/02-core-concepts.md`](docs/02-core-concepts.md) – Tools, resources, prompts |
-| 4 | Run | [`examples/02-file-reader`](examples/02-file-reader) – Interacting with the environment |
+| 3 | Run | [`examples/02-calculator-advanced`](examples/02-calculator-advanced) – More features |
+| 4 | Run | [`examples/03-file-reader`](examples/03-file-reader) – File I/O |
 | 5 | Read | [`docs/03-architecture.md`](docs/03-architecture.md) – How the pieces fit together |
-| 6 | Run | [`examples/03-sqlite-tool`](examples/03-sqlite-tool) – Real data integration |
+| 6 | Run | [`examples/04-sqlite-tool`](examples/04-sqlite-tool) – Database |
 | 7 | Read | [`docs/04-fastmcp-explained.md`](docs/04-fastmcp-explained.md) – What FastMCP hides |
 | 8 | Practice | [`exercises/`](exercises/) – Build your own tools |
 
@@ -52,15 +79,17 @@ Follow this order for best results:
 
 ```
 MCP-LBDA/
-├── README.md           ← You are here
-├── requirements.txt
-├── docs/               ← Concepts before code
-├── examples/           ← Runnable servers
-├── exercises/          ← Practice challenges
-├── solutions/          ← Reference answers
-├── slides/             ← Lecture outline
-└── CONTRIBUTING.md     ← How to add tools
+├── examples/
+│   ├── 01-calculator/        ← Minimal: in-memory FastMCP
+│   ├── 02-calculator-advanced/ ← Same domain, more features
+│   ├── 03-file-reader/       ← File I/O
+│   └── 04-sqlite-tool/       ← Database
+├── docs/
+├── exercises/
+└── ...
 ```
+
+**Key:** Both server and client use **FastMCP**. See [gofastmcp.com/servers/server](https://gofastmcp.com/servers/server) and [gofastmcp.com/clients/client](https://gofastmcp.com/clients/client).
 
 ---
 

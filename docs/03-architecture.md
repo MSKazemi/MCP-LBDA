@@ -9,19 +9,21 @@
                        │ "Call add(2,3)"
                        ▼
               ┌────────────────┐
-              │   MCP Client   │
+              │   MCP Client   │  ← FastMCP Client
               │ (e.g. Cursor)  │
               └───────┬────────┘
                       │ JSON-RPC over transport
                       ▼
               ┌────────────────┐
-              │   MCP Server   │
+              │   MCP Server   │  ← FastMCP
               ├────────────────┤
               │  Tools         │  ← add, multiply, read_file...
               │  Resources     │  ← file://, custom URIs
               │  Prompts       │  ← predefined templates
               └────────────────┘
 ```
+
+**Key:** FastMCP provides both server and client. See [gofastmcp.com](https://gofastmcp.com).
 
 ---
 
@@ -54,5 +56,13 @@
 - **Standardized:** Same protocol for any LLM and any tool set
 - **Decoupled:** Server and client can evolve independently
 - **Secure:** Server runs in your environment; you control what tools exist
+
+## Teaching: Full Loop
+
+```
+User → Fake LLM (simulated) → MCP Client → FastMCP Server → Tool → Result → User
+```
+
+Run `examples/01-calculator/demo.py` to see this without a real LLM. The fake LLM converts "add 4 and 5" into a structured tool call; the client sends it; the server runs the tool. Each example has `server.py` and `client.py` in the same directory.
 
 **Next:** [04 – FastMCP Explained](04-fastmcp-explained.md)

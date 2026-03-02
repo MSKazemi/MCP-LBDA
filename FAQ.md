@@ -4,6 +4,23 @@ Common questions and answers.
 
 ---
 
+## Do I need Cursor or Claude Desktop?
+
+No. Each example has a `client.py` using **FastMCP Client**:
+
+- **01-calculator** – In-memory `Client(mcp)` – minimal
+- **02-calculator-advanced** – STDIO `Client("server.py")` – more features
+- **03-file-reader**, **04-sqlite-tool** – STDIO clients
+- **01-calculator/demo.py** – Full loop with simulated LLM
+
+For real LLM integration, use Cursor, Claude Desktop, or your own client + API.
+
+## Does FastMCP support clients?
+
+Yes. **FastMCP provides both server and client.** Use `fastmcp.Client` for the client side. See [gofastmcp.com/clients/client](https://gofastmcp.com/clients/client).
+
+---
+
 ## Why not REST?
 
 REST is great for humans and traditional apps. MCP is designed for **LLM ↔ tool** communication:

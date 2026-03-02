@@ -34,19 +34,25 @@ Use this for in-person or recorded sessions. Adjust timing to your course durati
 
 ---
 
-## Block 3: Hands-On – Calculator (20–25 min)
+## Block 3: Hands-On – Server + Client (25–30 min)
 
-1. **Live Demo** (10 min)
+1. **Server Demo** (8 min)
    - Open `examples/01-calculator/server.py`
    - Walk through `@mcp.tool()`, types, docstring
-   - Run server, connect client, call `add`
+   - FastMCP = server only
 
-2. **Students Follow Along** (10 min)
-   - Everyone runs the example
-   - Try `subtract`, experiment with inputs
+2. **Client Demo** (7 min)
+   - Open `examples/01-calculator/client.py` – uses MCP SDK, same dir as server
+   - Connect, list tools, call tool
+   - Key: Server and client are independent
 
-3. **Exercise 01** (5 min)
-   - Add `multiply` – start in class, finish as homework
+3. **Full Loop Demo** (10 min)
+   - Run `examples/01-calculator/demo.py`
+   - User → Fake LLM → Client → Server → Result
+   - Teaching insight: model generates structured calls, doesn't execute Python
+
+4. **Exercise 01** (5 min)
+   - Add `multiply` to server – start in class, finish as homework
 
 ---
 

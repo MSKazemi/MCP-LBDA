@@ -1,3 +1,4 @@
+"""Minimal MCP server – two tools, nothing else."""
 from fastmcp import FastMCP
 
 mcp = FastMCP("Calculator")

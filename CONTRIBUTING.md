@@ -10,11 +10,13 @@ Thank you for contributing! This guide helps you add tools and examples.
    ```
    examples/04-my-example/
    ├── server.py
+   ├── client.py
    └── README.md
    ```
 
 2. **Follow the pattern:**
    - `server.py` – FastMCP server with `if __name__ == "__main__": mcp.run()`
+   - `client.py` – MCP SDK client that spawns server and calls tools (same dir as server)
    - `README.md` – What it demonstrates, how to run, what to observe
 
 3. **Update the root README** – add your example to the Learning Path table if it fits the sequence.
