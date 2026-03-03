@@ -1,68 +1,158 @@
-# 03 – Architecture
+# 3️⃣ Architecture and Flow
 
-## The Big Picture
+## Architecture
 
+```mermaid
+graph LR
+		User[User / Agent] --> LLM[LLM]
+		dir[dir]
+		MCPClient[MCP Client]
+		LLM --> MCPClient
+    
+    subgraph MCPClient
+	    MCPC[MCP Client] --> Roots[Roots]
+	    MCPC --> Sampling[Sampling]
+		end 
+
+	  
+	  
+		subgraph MCPServer[MCP Server]
+			MCPS[MCP Server] --> Tools[Tools]
+			MCPS --> Resources[Resources]
+			MCPS --> Prompt[Prompt Templates]
+		end 
+
+		MCPClient <--->|"Transport Layer"| MCPServer
+		Roots <--> |Opening<br/>Reading<br/>Analyzing| dir
+	
+	  Tools --> Tool1
+	  Tools --> Tool2
 ```
-                    ┌─────┐
-                    │ LLM │
-                    └──┬──┘
-                       │ "Call add(2,3)"
-                       ▼
-              ┌────────────────┐
-              │   MCP Client   │  ← FastMCP Client
-              │ (e.g. Cursor)  │
-              └───────┬────────┘
-                      │ JSON-RPC over transport
-                      ▼
-              ┌────────────────┐
-              │   MCP Server   │  ← FastMCP
-              ├────────────────┤
-              │  Tools         │  ← add, multiply, read_file...
-              │  Resources     │  ← file://, custom URIs
-              │  Prompts       │  ← predefined templates
-              └────────────────┘
-```
 
-**Key:** FastMCP provides both server and client. See [gofastmcp.com](https://gofastmcp.com).
+
 
 ---
 
-## What Each Box Does
+## Request Lifecycle
 
-| Component   | Role |
-|------------|------|
-| **LLM**    | Reasons about user input, decides when to call tools, interprets results. |
-| **MCP Client** | Talks to the LLM, sends tool calls to the server, returns results. |
-| **MCP Server** | Runs your tools, serves resources, manages prompts. |
-| **Tools**  | Your Python functions exposed with names and schemas. |
-| **Resources** | Read-only content the model can fetch by URI. |
-| **Prompts** | Templates that shape the model's behavior. |
+### Request Flow
+```
+User → Model → Tool Call → MCP Server → Result → Model → User
+```
+
+1. The **user** asks a question.
+2. The **model** decides it needs a tool (e.g., "add two numbers").
+3. The model calls the **tool** via the MCP client.
+4. The **MCP server** runs the tool and returns the result.
+5. The model receives the result, reasons, and responds to the user.
+
+
+
+1. User: *"What is 7 + 12?"*
+2. LLM decides it needs `add(7, 12)`
+3. Client sends `tools/call` → `{"name": "add", "arguments": {"a": 7, "b": 12}}`
+4. Server runs `add(7, 12)` → `19`
+5. Client returns `19` to the LLM
+6. LLM responds: *"7 + 12 = 19"*
+
+```mermaid
+flowchart TD
+    A[User Question] --> B[LLM Analysis]
+
+    B --> C{Needs Tool?}
+
+    C -->|No| D[Respond Directly]
+    D --> Z[Final Answer]
+
+    C -->|Yes| E[Create Tool Call]
+    E --> F[MCP Client Sends Request]
+    F --> G[MCP Server Executes Tool]
+    G --> H[Return Result]
+    H --> I[LLM Continues Reasoning]
+    I --> Z
+```
+
+#### More Complete Flow
+
+```mermaid
+flowchart TD
+    A[User Request] --> B[LLM Generates Plan]
+    B --> C{Needs Tool?}
+
+    C -- No --> D[LLM Responds Directly]
+    D --> Z[Final Response]
+
+    C -- Yes --> E[MCP Client Sends Tool Call]
+    E --> F[MCP Server Receives Request]
+
+    F --> G{Type of Capability?}
+
+    G -->|Prompt| H[Return Prompt Template]
+    G -->|Resource| I[Fetch Resource Data]
+    G -->|Tool| J[Execute Tool]
+
+    J --> K["Call External System<br/> K8s / DB"]
+    K --> J
+
+    H --> L[Return Result to MCP Client]
+    I --> L
+    J --> L
+
+    L --> M[LLM Continues Reasoning]
+    M --> Z[Final Response to User]
+```
+
+
+
+
+# 4️⃣ Example: Calculator
+
+User asks:
+
+> What is 7 + 12?
+
+LLM generates structured tool call:
+
+```json
+{
+  "name": "add",
+  "arguments": {"a": 7, "b": 12}
+}
+```
+
+Server executes:
+
+```python
+add(7, 12) → 19
+```
+
+Final answer:
+
+> 7 + 12 = 19
 
 ---
 
-## Request Flow (Simplified)
+### Client Options
 
-1. User: "What is 7 + 12?"
-2. LLM: decides it needs `add(7, 12)`
-3. Client: sends `tools/call` with `{"name": "add", "arguments": {"a": 7, "b": 12}}`
-4. Server: runs `add(7, 12)` → `19`
-5. Client: returns `19` to the LLM
-6. LLM: "7 + 12 = 19"
+- **Cursor** or **Claude Desktop** – full LLM integration
+- **FastMCP Client** – each example ships a `client.py` using `fastmcp.Client`
+- **`examples/01-calculator/demo.py`** – full loop with a simulated LLM
+
+
+# Teaching Mode
+
+Each example directory contains:
+
+* `server.py`
+* `client.py`
+* `demo.py` (simulated LLM loop)
+
+The simulated LLM allows you to understand MCP **without needing a real API key**.
 
 ---
 
-## Why This Design?
+## Reference
+> FastMCP provides both server and client. See [gofastmcp.com](https://gofastmcp.com).
 
-- **Standardized:** Same protocol for any LLM and any tool set
-- **Decoupled:** Server and client can evolve independently
-- **Secure:** Server runs in your environment; you control what tools exist
-
-## Teaching: Full Loop
-
-```
-User → Fake LLM (simulated) → MCP Client → FastMCP Server → Tool → Result → User
-```
-
-Run `examples/01-calculator/demo.py` to see this without a real LLM. The fake LLM converts "add 4 and 5" into a structured tool call; the client sends it; the server runs the tool. Each example has `server.py` and `client.py` in the same directory.
 
 **Next:** [04 – FastMCP Explained](04-fastmcp-explained.md)
