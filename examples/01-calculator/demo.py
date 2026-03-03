@@ -1,4 +1,12 @@
-"""Full demo: User → Fake LLM → FastMCP Client → Server → Result."""
+"""
+Full demo: User → Fake LLM → FastMCP Client → Server → Result.
+
+Simple explanations:
+- NamedTuple: a simple data holder (like a lightweight class) with named fields.
+- fake_llm: simulates an LLM by parsing text into tool calls. e.g. "add 4 and 5" → add(4,5).
+- asyncio.run(): run an async function from sync code. Use it when you need to call async
+  from a place that is not async (like this main loop).
+"""
 import asyncio
 import re
 from typing import NamedTuple
@@ -8,6 +16,7 @@ from server import mcp
 client = Client(mcp)
 
 
+# NamedTuple: a simple way to group tool name and arguments together
 class ToolCall(NamedTuple):
     tool: str
     arguments: dict
@@ -28,6 +37,7 @@ def fake_llm(user_input: str) -> ToolCall | None:
 
 
 async def call_tool(tool_name: str, arguments: dict):
+    # async with: connect, call tool, disconnect when done
     async with client:
         result = await client.call_tool(tool_name, arguments)
         return result.data
@@ -55,6 +65,7 @@ def main():
             continue
 
         print(f"  [Fake LLM] → {tool_call.tool}{tool_call.arguments}")
+        # asyncio.run: call async function from sync code (main loop is not async)
         result = asyncio.run(call_tool(tool_call.tool, tool_call.arguments))
         print(f"  [Server]   → {result}")
 

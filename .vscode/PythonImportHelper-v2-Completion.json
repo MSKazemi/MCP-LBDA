@@ -192,7 +192,7 @@
         "kind": 5,
         "importPath": "examples.01-calculator.client",
         "description": "examples.01-calculator.client",
-        "peekOfCode": "client = Client(mcp)\nasync def main():\n    async with client:\n        tools = await client.list_tools()\n        print(f\"Tools: {[t.name for t in tools]}\")\n        result = await client.call_tool(\"add\", {\"a\": 3, \"b\": 7})\n        print(f\"add(3, 7) => {result.data}\")\nif __name__ == \"__main__\":\n    asyncio.run(main())",
+        "peekOfCode": "client = Client(mcp)\nasync def main():\n    \"\"\"main is async because we use await inside.\"\"\"\n    # async with client: connect when we enter, disconnect when we leave\n    async with client:\n        # await: wait for this to finish before moving on\n        tools = await client.list_tools()\n        print(f\"Tools: {[t.name for t in tools]}\")\n        result = await client.call_tool(\"add\", {\"a\": 3, \"b\": 7})\n        print(f\"add(3, 7) => {result.data}\")",
         "detail": "examples.01-calculator.client",
         "documentation": {}
     },
@@ -228,7 +228,7 @@
         "kind": 5,
         "importPath": "examples.01-calculator.demo",
         "description": "examples.01-calculator.demo",
-        "peekOfCode": "client = Client(mcp)\nclass ToolCall(NamedTuple):\n    tool: str\n    arguments: dict\ndef fake_llm(user_input: str) -> ToolCall | None:\n    \"\"\"Parse user input → tool call. e.g. 'add 4 and 5' → add(4, 5).\"\"\"\n    inp = user_input.strip().lower()\n    if m := re.search(r\"add\\s+(\\d+)\\s+(?:and\\s+)?(\\d+)\", inp):\n        return ToolCall(\"add\", {\"a\": int(m.group(1)), \"b\": int(m.group(2))})\n    if m := re.search(r\"(\\d+)\\s*\\+\\s*(\\d+)\", inp):",
+        "peekOfCode": "client = Client(mcp)\n# NamedTuple: a simple way to group tool name and arguments together\nclass ToolCall(NamedTuple):\n    tool: str\n    arguments: dict\ndef fake_llm(user_input: str) -> ToolCall | None:\n    \"\"\"Parse user input → tool call. e.g. 'add 4 and 5' → add(4, 5).\"\"\"\n    inp = user_input.strip().lower()\n    if m := re.search(r\"add\\s+(\\d+)\\s+(?:and\\s+)?(\\d+)\", inp):\n        return ToolCall(\"add\", {\"a\": int(m.group(1)), \"b\": int(m.group(2))})",
         "detail": "examples.01-calculator.demo",
         "documentation": {}
     },
@@ -237,7 +237,7 @@
         "kind": 2,
         "importPath": "examples.01-calculator.server",
         "description": "examples.01-calculator.server",
-        "peekOfCode": "def add(a: int, b: int) -> int:\n    \"\"\"Add two integers.\"\"\"\n    return a + b\n@mcp.tool()\ndef subtract(a: int, b: int) -> int:\n    \"\"\"Subtract b from a.\"\"\"\n    return a - b\nif __name__ == \"__main__\":\n    mcp.run()",
+        "peekOfCode": "def add(a: int, b: int) -> int:\n    \"\"\"Add two integers.\"\"\"\n    return a + b\n@mcp.tool()  # register subtract as a tool clients can call\ndef subtract(a: int, b: int) -> int:\n    \"\"\"Subtract b from a.\"\"\"\n    return a - b\nif __name__ == \"__main__\":\n    # start the server\n    mcp.run()",
         "detail": "examples.01-calculator.server",
         "documentation": {}
     },
@@ -246,7 +246,7 @@
         "kind": 2,
         "importPath": "examples.01-calculator.server",
         "description": "examples.01-calculator.server",
-        "peekOfCode": "def subtract(a: int, b: int) -> int:\n    \"\"\"Subtract b from a.\"\"\"\n    return a - b\nif __name__ == \"__main__\":\n    mcp.run()",
+        "peekOfCode": "def subtract(a: int, b: int) -> int:\n    \"\"\"Subtract b from a.\"\"\"\n    return a - b\nif __name__ == \"__main__\":\n    # start the server\n    mcp.run()",
         "detail": "examples.01-calculator.server",
         "documentation": {}
     },
@@ -255,7 +255,7 @@
         "kind": 5,
         "importPath": "examples.01-calculator.server",
         "description": "examples.01-calculator.server",
-        "peekOfCode": "mcp = FastMCP(\"Calculator\")\n@mcp.tool()\ndef add(a: int, b: int) -> int:\n    \"\"\"Add two integers.\"\"\"\n    return a + b\n@mcp.tool()\ndef subtract(a: int, b: int) -> int:\n    \"\"\"Subtract b from a.\"\"\"\n    return a - b\nif __name__ == \"__main__\":",
+        "peekOfCode": "mcp = FastMCP(\"Calculator\")\n@mcp.tool()  # register add as a tool clients can call\ndef add(a: int, b: int) -> int:\n    \"\"\"Add two integers.\"\"\"\n    return a + b\n@mcp.tool()  # register subtract as a tool clients can call\ndef subtract(a: int, b: int) -> int:\n    \"\"\"Subtract b from a.\"\"\"\n    return a - b\nif __name__ == \"__main__\":",
         "detail": "examples.01-calculator.server",
         "documentation": {}
     },
@@ -264,7 +264,7 @@
         "kind": 5,
         "importPath": "examples.02-calculator-advanced.client",
         "description": "examples.02-calculator-advanced.client",
-        "peekOfCode": "EXAMPLE_DIR = Path(__file__).resolve().parent\nsys.path.insert(0, str(EXAMPLE_DIR))\nfrom fastmcp import Client\n# STDIO: client spawns server as subprocess (real client–server separation)\nclient = Client(str(EXAMPLE_DIR / \"server.py\"))\nasync def main():\n    async with client:\n        # Server info (from handshake)\n        info = client.initialize_result.serverInfo\n        print(f\"Server: {info.name}\")",
+        "peekOfCode": "EXAMPLE_DIR = Path(__file__).resolve().parent\nsys.path.insert(0, str(EXAMPLE_DIR))\nfrom fastmcp import Client\n# STDIO: pass server path; client spawns it as subprocess and talks over stdin/stdout\nclient = Client(str(EXAMPLE_DIR / \"server.py\"))\nasync def main():\n    async with client:  # connect when entering, disconnect when leaving\n        # Server info (from handshake when connecting)\n        info = client.initialize_result.serverInfo\n        print(f\"Server: {info.name}\")",
         "detail": "examples.02-calculator-advanced.client",
         "documentation": {}
     },
@@ -273,7 +273,7 @@
         "kind": 5,
         "importPath": "examples.02-calculator-advanced.client",
         "description": "examples.02-calculator-advanced.client",
-        "peekOfCode": "client = Client(str(EXAMPLE_DIR / \"server.py\"))\nasync def main():\n    async with client:\n        # Server info (from handshake)\n        info = client.initialize_result.serverInfo\n        print(f\"Server: {info.name}\")\n        # Tools\n        tools = await client.list_tools()\n        print(f\"Tools: {[t.name for t in tools]}\")\n        # Resource",
+        "peekOfCode": "client = Client(str(EXAMPLE_DIR / \"server.py\"))\nasync def main():\n    async with client:  # connect when entering, disconnect when leaving\n        # Server info (from handshake when connecting)\n        info = client.initialize_result.serverInfo\n        print(f\"Server: {info.name}\")\n        # Tools\n        tools = await client.list_tools()\n        print(f\"Tools: {[t.name for t in tools]}\")\n        # Resource: read-only data the server exposes (like a file or info page)",
         "detail": "examples.02-calculator-advanced.client",
         "documentation": {}
     },
@@ -300,7 +300,7 @@
         "kind": 2,
         "importPath": "examples.02-calculator-advanced.server",
         "description": "examples.02-calculator-advanced.server",
-        "peekOfCode": "def multiply(a: int, b: int) -> int:\n    \"\"\"Multiply two integers.\"\"\"\n    return a * b\n@mcp.tool()\ndef divide(a: int, b: int) -> float:\n    \"\"\"Divide a by b. Returns float.\"\"\"\n    if b == 0:\n        raise ValueError(\"Cannot divide by zero\")\n    return a / b\n@mcp.resource(\"calc://info\")",
+        "peekOfCode": "def multiply(a: int, b: int) -> int:\n    \"\"\"Multiply two integers.\"\"\"\n    return a * b\n@mcp.tool()\ndef divide(a: int, b: int) -> float:\n    \"\"\"Divide a by b. Returns float.\"\"\"\n    if b == 0:\n        raise ValueError(\"Cannot divide by zero\")\n    return a / b\n@mcp.resource(\"calc://info\")  # expose data at this URI; clients read it",
         "detail": "examples.02-calculator-advanced.server",
         "documentation": {}
     },
@@ -309,7 +309,7 @@
         "kind": 2,
         "importPath": "examples.02-calculator-advanced.server",
         "description": "examples.02-calculator-advanced.server",
-        "peekOfCode": "def divide(a: int, b: int) -> float:\n    \"\"\"Divide a by b. Returns float.\"\"\"\n    if b == 0:\n        raise ValueError(\"Cannot divide by zero\")\n    return a / b\n@mcp.resource(\"calc://info\")\ndef calculator_info() -> str:\n    \"\"\"Info about this calculator.\"\"\"\n    return \"Calculator Advanced v1.0 – add, subtract, multiply, divide\"\n@mcp.prompt()",
+        "peekOfCode": "def divide(a: int, b: int) -> float:\n    \"\"\"Divide a by b. Returns float.\"\"\"\n    if b == 0:\n        raise ValueError(\"Cannot divide by zero\")\n    return a / b\n@mcp.resource(\"calc://info\")  # expose data at this URI; clients read it\ndef calculator_info() -> str:\n    \"\"\"Info about this calculator.\"\"\"\n    return \"Calculator Advanced v1.0 – add, subtract, multiply, divide\"\n@mcp.prompt()  # expose a prompt template clients can use",
         "detail": "examples.02-calculator-advanced.server",
         "documentation": {}
     },
@@ -318,7 +318,7 @@
         "kind": 2,
         "importPath": "examples.02-calculator-advanced.server",
         "description": "examples.02-calculator-advanced.server",
-        "peekOfCode": "def calculator_info() -> str:\n    \"\"\"Info about this calculator.\"\"\"\n    return \"Calculator Advanced v1.0 – add, subtract, multiply, divide\"\n@mcp.prompt()\ndef compute_expression(expression: str) -> str:\n    \"\"\"Create a prompt to compute a math expression.\"\"\"\n    return f\"Compute the following: {expression}\"\nif __name__ == \"__main__\":\n    mcp.run()",
+        "peekOfCode": "def calculator_info() -> str:\n    \"\"\"Info about this calculator.\"\"\"\n    return \"Calculator Advanced v1.0 – add, subtract, multiply, divide\"\n@mcp.prompt()  # expose a prompt template clients can use\ndef compute_expression(expression: str) -> str:\n    \"\"\"Create a prompt to compute a math expression.\"\"\"\n    return f\"Compute the following: {expression}\"\nif __name__ == \"__main__\":\n    mcp.run()",
         "detail": "examples.02-calculator-advanced.server",
         "documentation": {}
     },
@@ -345,7 +345,7 @@
         "kind": 5,
         "importPath": "examples.03-file-reader.client",
         "description": "examples.03-file-reader.client",
-        "peekOfCode": "EXAMPLE_DIR = Path(__file__).resolve().parent\nclient = Client(str(EXAMPLE_DIR / \"server.py\"))\nasync def main():\n    async with client:\n        tools = await client.list_tools()\n        print(f\"Tools: {[t.name for t in tools]}\")\n        result = await client.call_tool(\n            \"read_file\",\n            {\"path\": str(EXAMPLE_DIR / \"README.md\")},\n        )",
+        "peekOfCode": "EXAMPLE_DIR = Path(__file__).resolve().parent\nclient = Client(str(EXAMPLE_DIR / \"server.py\"))  # STDIO: pass server path\nasync def main():\n    async with client:  # connect, then disconnect when done\n        tools = await client.list_tools()\n        print(f\"Tools: {[t.name for t in tools]}\")\n        result = await client.call_tool(\n            \"read_file\",\n            {\"path\": str(EXAMPLE_DIR / \"README.md\")},\n        )",
         "detail": "examples.03-file-reader.client",
         "documentation": {}
     },
@@ -354,7 +354,7 @@
         "kind": 5,
         "importPath": "examples.03-file-reader.client",
         "description": "examples.03-file-reader.client",
-        "peekOfCode": "client = Client(str(EXAMPLE_DIR / \"server.py\"))\nasync def main():\n    async with client:\n        tools = await client.list_tools()\n        print(f\"Tools: {[t.name for t in tools]}\")\n        result = await client.call_tool(\n            \"read_file\",\n            {\"path\": str(EXAMPLE_DIR / \"README.md\")},\n        )\n        print(f\"read_file(README.md) =>\\n{result.data[:200]}...\")",
+        "peekOfCode": "client = Client(str(EXAMPLE_DIR / \"server.py\"))  # STDIO: pass server path\nasync def main():\n    async with client:  # connect, then disconnect when done\n        tools = await client.list_tools()\n        print(f\"Tools: {[t.name for t in tools]}\")\n        result = await client.call_tool(\n            \"read_file\",\n            {\"path\": str(EXAMPLE_DIR / \"README.md\")},\n        )\n        print(f\"read_file(README.md) =>\\n{result.data[:200]}...\")",
         "detail": "examples.03-file-reader.client",
         "documentation": {}
     },
@@ -372,7 +372,7 @@
         "kind": 5,
         "importPath": "examples.03-file-reader.server",
         "description": "examples.03-file-reader.server",
-        "peekOfCode": "mcp = FastMCP(\"File Reader\")\n@mcp.tool()\ndef read_file(path: str) -> str:\n    \"\"\"Read the contents of a file. Provide a path relative to current directory or absolute.\"\"\"\n    p = Path(path)\n    if not p.exists():\n        return f\"Error: File not found: {path}\"\n    if not p.is_file():\n        return f\"Error: Not a file: {path}\"\n    try:",
+        "peekOfCode": "mcp = FastMCP(\"File Reader\")\n@mcp.tool()  # register as tool clients can call\ndef read_file(path: str) -> str:\n    \"\"\"Read the contents of a file. Provide a path relative to current directory or absolute.\"\"\"\n    p = Path(path)\n    if not p.exists():\n        return f\"Error: File not found: {path}\"\n    if not p.is_file():\n        return f\"Error: Not a file: {path}\"\n    try:",
         "detail": "examples.03-file-reader.server",
         "documentation": {}
     },
@@ -381,7 +381,7 @@
         "kind": 5,
         "importPath": "examples.04-sqlite-tool.client",
         "description": "examples.04-sqlite-tool.client",
-        "peekOfCode": "EXAMPLE_DIR = Path(__file__).resolve().parent\nclient = Client(str(EXAMPLE_DIR / \"server.py\"))\nasync def main():\n    async with client:\n        tools = await client.list_tools()\n        print(f\"Tools: {[t.name for t in tools]}\")\n        result = await client.call_tool(\n            \"sql_query\",\n            {\"query\": \"SELECT * FROM tasks\"},\n        )",
+        "peekOfCode": "EXAMPLE_DIR = Path(__file__).resolve().parent\nclient = Client(str(EXAMPLE_DIR / \"server.py\"))\nasync def main():\n    async with client:  # connect, run, disconnect\n        tools = await client.list_tools()\n        print(f\"Tools: {[t.name for t in tools]}\")\n        result = await client.call_tool(\n            \"sql_query\",\n            {\"query\": \"SELECT * FROM tasks\"},\n        )",
         "detail": "examples.04-sqlite-tool.client",
         "documentation": {}
     },
@@ -390,7 +390,7 @@
         "kind": 5,
         "importPath": "examples.04-sqlite-tool.client",
         "description": "examples.04-sqlite-tool.client",
-        "peekOfCode": "client = Client(str(EXAMPLE_DIR / \"server.py\"))\nasync def main():\n    async with client:\n        tools = await client.list_tools()\n        print(f\"Tools: {[t.name for t in tools]}\")\n        result = await client.call_tool(\n            \"sql_query\",\n            {\"query\": \"SELECT * FROM tasks\"},\n        )\n        print(f\"sql_query(SELECT * FROM tasks) =>\\n{result.data}\")",
+        "peekOfCode": "client = Client(str(EXAMPLE_DIR / \"server.py\"))\nasync def main():\n    async with client:  # connect, run, disconnect\n        tools = await client.list_tools()\n        print(f\"Tools: {[t.name for t in tools]}\")\n        result = await client.call_tool(\n            \"sql_query\",\n            {\"query\": \"SELECT * FROM tasks\"},\n        )\n        print(f\"sql_query(SELECT * FROM tasks) =>\\n{result.data}\")",
         "detail": "examples.04-sqlite-tool.client",
         "documentation": {}
     },
@@ -399,7 +399,7 @@
         "kind": 2,
         "importPath": "examples.04-sqlite-tool.server",
         "description": "examples.04-sqlite-tool.server",
-        "peekOfCode": "def get_connection():\n    \"\"\"Get a connection to the SQLite database.\"\"\"\n    return sqlite3.connect(DB_PATH)\n@mcp.tool()\ndef sql_query(query: str) -> str:\n    \"\"\"Execute a read-only SQL query on the sample database. Use SELECT only.\"\"\"\n    if \";\" in query and \"SELECT\" not in query.upper().split(\";\")[0]:\n        return \"Error: Only SELECT queries are allowed.\"\n    if \"INSERT\" in query.upper() or \"UPDATE\" in query.upper() or \"DELETE\" in query.upper():\n        return \"Error: Write operations are not allowed.\"",
+        "peekOfCode": "def get_connection():\n    \"\"\"Get a connection to the SQLite database.\"\"\"\n    return sqlite3.connect(DB_PATH)\n@mcp.tool()\ndef sql_query(query: str) -> str:  # only SELECT allowed; no INSERT/UPDATE/DELETE\n    \"\"\"Execute a read-only SQL query on the sample database. Use SELECT only.\"\"\"\n    if \";\" in query and \"SELECT\" not in query.upper().split(\";\")[0]:\n        return \"Error: Only SELECT queries are allowed.\"\n    if \"INSERT\" in query.upper() or \"UPDATE\" in query.upper() or \"DELETE\" in query.upper():\n        return \"Error: Write operations are not allowed.\"",
         "detail": "examples.04-sqlite-tool.server",
         "documentation": {}
     },
@@ -408,7 +408,7 @@
         "kind": 2,
         "importPath": "examples.04-sqlite-tool.server",
         "description": "examples.04-sqlite-tool.server",
-        "peekOfCode": "def sql_query(query: str) -> str:\n    \"\"\"Execute a read-only SQL query on the sample database. Use SELECT only.\"\"\"\n    if \";\" in query and \"SELECT\" not in query.upper().split(\";\")[0]:\n        return \"Error: Only SELECT queries are allowed.\"\n    if \"INSERT\" in query.upper() or \"UPDATE\" in query.upper() or \"DELETE\" in query.upper():\n        return \"Error: Write operations are not allowed.\"\n    try:\n        conn = get_connection()\n        cur = conn.execute(query)\n        rows = cur.fetchall()",
+        "peekOfCode": "def sql_query(query: str) -> str:  # only SELECT allowed; no INSERT/UPDATE/DELETE\n    \"\"\"Execute a read-only SQL query on the sample database. Use SELECT only.\"\"\"\n    if \";\" in query and \"SELECT\" not in query.upper().split(\";\")[0]:\n        return \"Error: Only SELECT queries are allowed.\"\n    if \"INSERT\" in query.upper() or \"UPDATE\" in query.upper() or \"DELETE\" in query.upper():\n        return \"Error: Write operations are not allowed.\"\n    try:\n        conn = get_connection()  # open connection\n        cur = conn.execute(query)\n        rows = cur.fetchall()",
         "detail": "examples.04-sqlite-tool.server",
         "documentation": {}
     },
@@ -417,7 +417,7 @@
         "kind": 5,
         "importPath": "examples.04-sqlite-tool.server",
         "description": "examples.04-sqlite-tool.server",
-        "peekOfCode": "DB_PATH = Path(__file__).parent / \"database.db\"\nmcp = FastMCP(\"SQLite Tool\")\ndef get_connection():\n    \"\"\"Get a connection to the SQLite database.\"\"\"\n    return sqlite3.connect(DB_PATH)\n@mcp.tool()\ndef sql_query(query: str) -> str:\n    \"\"\"Execute a read-only SQL query on the sample database. Use SELECT only.\"\"\"\n    if \";\" in query and \"SELECT\" not in query.upper().split(\";\")[0]:\n        return \"Error: Only SELECT queries are allowed.\"",
+        "peekOfCode": "DB_PATH = Path(__file__).parent / \"database.db\"\nmcp = FastMCP(\"SQLite Tool\")\ndef get_connection():\n    \"\"\"Get a connection to the SQLite database.\"\"\"\n    return sqlite3.connect(DB_PATH)\n@mcp.tool()\ndef sql_query(query: str) -> str:  # only SELECT allowed; no INSERT/UPDATE/DELETE\n    \"\"\"Execute a read-only SQL query on the sample database. Use SELECT only.\"\"\"\n    if \";\" in query and \"SELECT\" not in query.upper().split(\";\")[0]:\n        return \"Error: Only SELECT queries are allowed.\"",
         "detail": "examples.04-sqlite-tool.server",
         "documentation": {}
     },
@@ -426,7 +426,7 @@
         "kind": 5,
         "importPath": "examples.04-sqlite-tool.server",
         "description": "examples.04-sqlite-tool.server",
-        "peekOfCode": "mcp = FastMCP(\"SQLite Tool\")\ndef get_connection():\n    \"\"\"Get a connection to the SQLite database.\"\"\"\n    return sqlite3.connect(DB_PATH)\n@mcp.tool()\ndef sql_query(query: str) -> str:\n    \"\"\"Execute a read-only SQL query on the sample database. Use SELECT only.\"\"\"\n    if \";\" in query and \"SELECT\" not in query.upper().split(\";\")[0]:\n        return \"Error: Only SELECT queries are allowed.\"\n    if \"INSERT\" in query.upper() or \"UPDATE\" in query.upper() or \"DELETE\" in query.upper():",
+        "peekOfCode": "mcp = FastMCP(\"SQLite Tool\")\ndef get_connection():\n    \"\"\"Get a connection to the SQLite database.\"\"\"\n    return sqlite3.connect(DB_PATH)\n@mcp.tool()\ndef sql_query(query: str) -> str:  # only SELECT allowed; no INSERT/UPDATE/DELETE\n    \"\"\"Execute a read-only SQL query on the sample database. Use SELECT only.\"\"\"\n    if \";\" in query and \"SELECT\" not in query.upper().split(\";\")[0]:\n        return \"Error: Only SELECT queries are allowed.\"\n    if \"INSERT\" in query.upper() or \"UPDATE\" in query.upper() or \"DELETE\" in query.upper():",
         "detail": "examples.04-sqlite-tool.server",
         "documentation": {}
     },
@@ -444,7 +444,7 @@
         "kind": 2,
         "importPath": "solutions.solution-01.server",
         "description": "solutions.solution-01.server",
-        "peekOfCode": "def subtract(a: int, b: int) -> int:\n    \"\"\"Subtract b from a.\"\"\"\n    return a - b\n@mcp.tool()\ndef multiply(a: int, b: int) -> int:\n    \"\"\"Multiply two integers.\"\"\"\n    return a * b\nif __name__ == \"__main__\":\n    mcp.run()",
+        "peekOfCode": "def subtract(a: int, b: int) -> int:\n    \"\"\"Subtract b from a.\"\"\"\n    return a - b\n@mcp.tool()\ndef multiply(a: int, b: int) -> int:\n    \"\"\"Multiply two integers.\"\"\"\n    return a * b\nif __name__ == \"__main__\":\n    mcp.run()  # start the server",
         "detail": "solutions.solution-01.server",
         "documentation": {}
     },
@@ -453,7 +453,7 @@
         "kind": 2,
         "importPath": "solutions.solution-01.server",
         "description": "solutions.solution-01.server",
-        "peekOfCode": "def multiply(a: int, b: int) -> int:\n    \"\"\"Multiply two integers.\"\"\"\n    return a * b\nif __name__ == \"__main__\":\n    mcp.run()",
+        "peekOfCode": "def multiply(a: int, b: int) -> int:\n    \"\"\"Multiply two integers.\"\"\"\n    return a * b\nif __name__ == \"__main__\":\n    mcp.run()  # start the server",
         "detail": "solutions.solution-01.server",
         "documentation": {}
     },
@@ -462,7 +462,7 @@
         "kind": 5,
         "importPath": "solutions.solution-01.server",
         "description": "solutions.solution-01.server",
-        "peekOfCode": "mcp = FastMCP(\"Calculator\")\n@mcp.tool()\ndef add(a: int, b: int) -> int:\n    \"\"\"Add two integers.\"\"\"\n    return a + b\n@mcp.tool()\ndef subtract(a: int, b: int) -> int:\n    \"\"\"Subtract b from a.\"\"\"\n    return a - b\n@mcp.tool()",
+        "peekOfCode": "mcp = FastMCP(\"Calculator\")\n@mcp.tool()  # register as MCP tool\ndef add(a: int, b: int) -> int:\n    \"\"\"Add two integers.\"\"\"\n    return a + b\n@mcp.tool()\ndef subtract(a: int, b: int) -> int:\n    \"\"\"Subtract b from a.\"\"\"\n    return a - b\n@mcp.tool()",
         "detail": "solutions.solution-01.server",
         "documentation": {}
     },
@@ -471,7 +471,7 @@
         "kind": 2,
         "importPath": "solutions.solution-03.server",
         "description": "solutions.solution-03.server",
-        "peekOfCode": "def create_note(title: str, content: str) -> str:\n    \"\"\"Create a new note with the given title and content.\"\"\"\n    notes[title] = content\n    return f\"Note '{title}' created.\"\n@mcp.tool()\ndef list_notes() -> str:\n    \"\"\"List all note titles.\"\"\"\n    if not notes:\n        return \"No notes yet.\"\n    return \"\\n\".join(f\"- {t}\" for t in notes.keys())",
+        "peekOfCode": "def create_note(title: str, content: str) -> str:  # store in notes dict\n    \"\"\"Create a new note with the given title and content.\"\"\"\n    notes[title] = content\n    return f\"Note '{title}' created.\"\n@mcp.tool()\ndef list_notes() -> str:\n    \"\"\"List all note titles.\"\"\"\n    if not notes:\n        return \"No notes yet.\"\n    return \"\\n\".join(f\"- {t}\" for t in notes.keys())",
         "detail": "solutions.solution-03.server",
         "documentation": {}
     },
@@ -507,7 +507,7 @@
         "kind": 5,
         "importPath": "solutions.solution-03.server",
         "description": "solutions.solution-03.server",
-        "peekOfCode": "mcp = FastMCP(\"Notes Server\")\nnotes: dict[str, str] = {}\n@mcp.tool()\ndef create_note(title: str, content: str) -> str:\n    \"\"\"Create a new note with the given title and content.\"\"\"\n    notes[title] = content\n    return f\"Note '{title}' created.\"\n@mcp.tool()\ndef list_notes() -> str:\n    \"\"\"List all note titles.\"\"\"",
+        "peekOfCode": "mcp = FastMCP(\"Notes Server\")\nnotes: dict[str, str] = {}  # in-memory storage\n@mcp.tool()\ndef create_note(title: str, content: str) -> str:  # store in notes dict\n    \"\"\"Create a new note with the given title and content.\"\"\"\n    notes[title] = content\n    return f\"Note '{title}' created.\"\n@mcp.tool()\ndef list_notes() -> str:\n    \"\"\"List all note titles.\"\"\"",
         "detail": "solutions.solution-03.server",
         "documentation": {}
     }

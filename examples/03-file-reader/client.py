@@ -1,15 +1,20 @@
-"""File Reader client – FastMCP Client, STDIO transport."""
+"""
+File Reader client – FastMCP Client, STDIO transport.
+
+Same patterns as other clients: async with to connect, await to call tools.
+Client spawns server as subprocess and talks over stdin/stdout.
+"""
 import asyncio
 from pathlib import Path
 
 from fastmcp import Client
 
 EXAMPLE_DIR = Path(__file__).resolve().parent
-client = Client(str(EXAMPLE_DIR / "server.py"))
+client = Client(str(EXAMPLE_DIR / "server.py"))  # STDIO: pass server path
 
 
 async def main():
-    async with client:
+    async with client:  # connect, then disconnect when done
         tools = await client.list_tools()
         print(f"Tools: {[t.name for t in tools]}")
 

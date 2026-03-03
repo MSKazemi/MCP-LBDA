@@ -1,9 +1,10 @@
+"""Solution for calculator exercise – add, subtract, multiply. Same patterns as 01-calculator."""
 from fastmcp import FastMCP
 
 mcp = FastMCP("Calculator")
 
 
-@mcp.tool()
+@mcp.tool()  # register as MCP tool
 def add(a: int, b: int) -> int:
     """Add two integers."""
     return a + b
@@ -22,4 +23,4 @@ def multiply(a: int, b: int) -> int:
 
 
 if __name__ == "__main__":
-    mcp.run()
+    mcp.run()  # start the server

@@ -1,11 +1,17 @@
+"""
+Notes Server – create, list, get, delete notes. In-memory storage (dict).
+
+Simple explanations:
+- notes: a dict that holds title → content. Lives in memory; lost when server stops.
+"""
 from fastmcp import FastMCP
 
 mcp = FastMCP("Notes Server")
-notes: dict[str, str] = {}
+notes: dict[str, str] = {}  # in-memory storage
 
 
 @mcp.tool()
-def create_note(title: str, content: str) -> str:
+def create_note(title: str, content: str) -> str:  # store in notes dict
     """Create a new note with the given title and content."""
     notes[title] = content
     return f"Note '{title}' created."

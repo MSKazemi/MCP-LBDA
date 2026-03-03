@@ -1,3 +1,4 @@
+"""File Reader server – one tool that reads files from disk."""
 from pathlib import Path
 
 from fastmcp import FastMCP
@@ -5,7 +6,7 @@ from fastmcp import FastMCP
 mcp = FastMCP("File Reader")
 
 
-@mcp.tool()
+@mcp.tool()  # register as tool clients can call
 def read_file(path: str) -> str:
     """Read the contents of a file. Provide a path relative to current directory or absolute."""
     p = Path(path)
@@ -20,4 +21,4 @@ def read_file(path: str) -> str:
 
 
 if __name__ == "__main__":
-    mcp.run()
+    mcp.run()  # start the server

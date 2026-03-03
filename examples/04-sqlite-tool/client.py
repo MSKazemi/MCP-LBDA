@@ -1,4 +1,8 @@
-"""SQLite Tool client – FastMCP Client, STDIO transport."""
+"""
+SQLite Tool client – FastMCP Client, STDIO transport.
+
+Same patterns: async with to connect, await to call tools. STDIO = client spawns server.
+"""
 import asyncio
 from pathlib import Path
 
@@ -9,7 +13,7 @@ client = Client(str(EXAMPLE_DIR / "server.py"))
 
 
 async def main():
-    async with client:
+    async with client:  # connect, run, disconnect
         tools = await client.list_tools()
         print(f"Tools: {[t.name for t in tools]}")
 
