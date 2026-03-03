@@ -1,13 +1,13 @@
-# MCP Course – Model Context Protocol
+# MCP - Model Context Protocol
+
 ---
 > Learn how to build and connect **MCP servers and clients** using FastMCP.
 > No prior MCP knowledge required — basic Python is enough.
-
 ---
 
-# 1️⃣ Introduction
+## 1️⃣ Introduction
 
-## What Problem Does MCP Solve?
+### What Problem Does MCP Solve?
 
 Large Language Models (LLMs) are powerful at reasoning and generating text.
 
@@ -56,7 +56,7 @@ With tools, an LLM can:
 
 
 
-
+---
 ### MCP Ecosystem Overview
 
 ```mermaid
@@ -94,6 +94,7 @@ flowchart LR
 
 > Reference: [modelcontextprotocol.io](https://modelcontextprotocol.io/docs/getting-started/intro)
 
+---
 
 ### Simple Architecture
 
@@ -150,5 +151,6 @@ flowchart LR
 ## Reference
 > FastMCP provides both server and client. See [gofastmcp.com](https://gofastmcp.com).
 
+---
 
-**Next:** [04 – FastMCP Explained](04-fastmcp-explained.md)
+**Next:** [02 – MCP Core Concepts](02-core-concepts.md)

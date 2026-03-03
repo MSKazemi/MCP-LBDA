@@ -72,7 +72,7 @@ flowchart TD
     I --> Z
 ```
 
-#### More Complete Flow
+### More Complete Flow
 
 ```mermaid
 flowchart TD
@@ -101,58 +101,7 @@ flowchart TD
     L --> M[LLM Continues Reasoning]
     M --> Z[Final Response to User]
 ```
-
-
-
-
-# 4️⃣ Example: Calculator
-
-User asks:
-
-> What is 7 + 12?
-
-LLM generates structured tool call:
-
-```json
-{
-  "name": "add",
-  "arguments": {"a": 7, "b": 12}
-}
-```
-
-Server executes:
-
-```python
-add(7, 12) → 19
-```
-
-Final answer:
-
-> 7 + 12 = 19
-
 ---
-
-### Client Options
-
-- **Cursor** or **Claude Desktop** – full LLM integration
-- **FastMCP Client** – each example ships a `client.py` using `fastmcp.Client`
-- **`examples/01-calculator/demo.py`** – full loop with a simulated LLM
-
-
-# Teaching Mode
-
-Each example directory contains:
-
-* `server.py`
-* `client.py`
-* `demo.py` (simulated LLM loop)
-
-The simulated LLM allows you to understand MCP **without needing a real API key**.
-
----
-
-## Reference
-> FastMCP provides both server and client. See [gofastmcp.com](https://gofastmcp.com).
 
 
 **Next:** [04 – FastMCP Explained](04-fastmcp-explained.md)

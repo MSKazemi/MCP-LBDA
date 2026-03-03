@@ -550,8 +550,4 @@ They solve **three different problems**.
 
 ---
 
-## Reference
-> FastMCP provides both server and client. See [gofastmcp.com](https://gofastmcp.com).
-
-
-**Next:** [04 – FastMCP Explained](04-fastmcp-explained.md)
+**Next:** [03 – Architecture and Flow](03-architecture.md)

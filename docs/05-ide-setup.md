@@ -13,14 +13,6 @@ How to run this course's MCP servers inside your IDE and use them in Chat.
 | **VS Code** | Copilot Chat (with GitHub Copilot) | `Ctrl+Alt+I` (Win/Linux), `⌃⌘I` (Mac) |
 | **Cursor** | Cursor Chat (built-in) | `Ctrl+L` or Chat panel |
 
-When you add an MCP server to your IDE:
-
-- **Tools** (e.g. `add`, `multiply`) become available to the AI. You can say: *"add 3 and 4"* or *"use the calculator to compute 5 * (3 + 2)"*.
-- **Resources** (e.g. `calc://info`) can be fetched as context.
-- **Prompts** (e.g. `compute_expression`) guide the AI with pre-built instructions.
-
-The AI decides when to call tools based on your message. You may be asked to approve tool calls before they run.
-
 ---
 
 ## VS Code – Add MCP Server
@@ -149,4 +141,3 @@ Both use `command` and `args` for stdio servers. Make sure your Python environme
 | `ModuleNotFoundError: fastmcp` | Wrong Python env | Use the venv Python that has `fastmcp` installed |
 | Server not found in Chat | Config not loaded | Reload MCP servers or restart the IDE |
 
-**Previous:** [04 – FastMCP Explained](04-fastmcp-explained.md) | **Next:** [Exercises](../exercises/)
