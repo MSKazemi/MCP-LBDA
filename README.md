@@ -90,7 +90,8 @@ MCP-LBDA/
 ├── docs/
 │   └── 05-ide-setup.md       ← Add MCP to VS Code/Cursor
 ├── exercises/
-├── mcp.json.example         ← Sample config for IDE
+├── mcp.json.cursor.example  ← Cursor config
+├── mcp.json.vscode.example  ← VS Code config
 └── ...
 ```
 

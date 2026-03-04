@@ -62,7 +62,7 @@ For the advanced calculator:
 }
 ```
 
-Replace `/path/to/MCP-LBDA` with your actual repo path. On Windows, use the path to `.venv\Scripts\python.exe` and `\\` for backslashes in JSON strings. See also `mcp.json.example` in the repo root.
+Replace `/path/to/MCP-LBDA` with your actual repo path. On Windows, use the path to `.venv\Scripts\python.exe` and `\\` for backslashes in JSON strings. See also `mcp.json.vscode.example` (VS Code) and `mcp.json.cursor.example` (Cursor) in the repo root.
 
 ### 3. Trust and start
 
