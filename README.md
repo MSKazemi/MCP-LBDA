@@ -14,6 +14,8 @@ A self-paced, beginner-to-intermediate course for building MCP servers with **Fa
 
 **Prerequisites:** Basic Python. No prior MCP knowledge required.
 
+**Windows users:** See [Setup for Windows](docs/06-windows-setup.md) – Git, Python, and VS Code installation.
+
 ---
 
 ## ⚡ Quick Start (5 Minutes)
@@ -24,9 +26,12 @@ git clone https://github.com/MSKazemi/MCP-LBDA.git
 cd MCP-LBDA
 
 # Create and activate virtual environment
-python3 -m venv .venv       # or: python -m venv .venv
+python3 -m venv .venv       # Linux/macOS (or: python -m venv .venv)
 source .venv/bin/activate   # Linux/macOS
-# .venv\Scripts\activate   # Windows
+
+# Windows (Command Prompt or PowerShell):
+python -m venv .venv
+.venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
@@ -72,6 +77,7 @@ All docs include simple explanations. Code examples have inline comments.
 | [03 – Architecture](docs/03-architecture.md) | Request lifecycle, how pieces fit together |
 | [04 – FastMCP Explained](docs/04-fastmcp.md) | MCP vs SDK vs FastMCP; what FastMCP hides |
 | [05 – IDE Setup](docs/05-ide-setup.md) | Add MCP to VS Code or Cursor, use in Chat |
+| [06 – Setup for Windows](docs/06-windows-setup.md) | Git, Python, VS Code on Windows |
 
 **Going deeper:** [03-architecture](docs/03-architecture.md) includes MCP spec and transport options.
 
@@ -139,7 +145,8 @@ MCP-LBDA/
 │   ├── 02-core-concepts.md
 │   ├── 03-architecture.md
 │   ├── 04-fastmcp.md
-│   └── 05-ide-setup.md
+│   ├── 05-ide-setup.md
+│   └── 06-windows-setup.md    ← Git, Python, VS Code (Windows)
 ├── examples/
 │   ├── 01-calculator/         ← Minimal: server, client, demo
 │   ├── 02-calculator-advanced/← STDIO, resource, prompt

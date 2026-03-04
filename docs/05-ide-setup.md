@@ -2,6 +2,8 @@
 
 How to run this course's MCP servers inside your IDE and use them in Chat.
 
+**Windows users:** If you haven't installed Git, Python, or VS Code yet, see [06 – Setup for Windows](06-windows-setup.md) first.
+
 ---
 
 ## What is Chat (VS Code / Cursor)?
@@ -127,7 +129,7 @@ Open Cursor Chat (`Ctrl+L`) and try the same prompts as for VS Code.
 | Config key | VS Code | Cursor |
 |------------|---------|--------|
 | Root | `servers` | `mcpServers` |
-| File | User profile or `.vscode/mcp.json` | `~/.cursor/mcp.json` |
+| File | User profile or `.vscode/mcp.json` | `~/.cursor/mcp.json` (Windows: `C:\Users\<You>\.cursor\mcp.json`) |
 
 Both use `command` and `args` for stdio servers. Make sure your Python environment has `fastmcp` installed (`pip install -r requirements.txt`).
 
@@ -137,7 +139,8 @@ Both use `command` and `args` for stdio servers. Make sure your Python environme
 
 | Error | Cause | Fix |
 |-------|-------|-----|
-| `spawn python ENOENT` | `python` not in PATH | Use `python3` or full path to venv Python |
+| `spawn python ENOENT` | `python` not in PATH | Use full path to venv Python (e.g. `C:/.../MCP-LBDA/.venv/Scripts/python.exe` on Windows) |
 | `ModuleNotFoundError: fastmcp` | Wrong Python env | Use the venv Python that has `fastmcp` installed |
 | Server not found in Chat | Config not loaded | Reload MCP servers or restart the IDE |
+| `git` not recognized (Windows) | Git not in PATH | Reinstall Git, choose "Git from the command line" – see [06 – Windows Setup](06-windows-setup.md) |
 
