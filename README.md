@@ -19,7 +19,8 @@ A self-paced, beginner-to-intermediate course for building MCP servers with **Fa
 ## ⚡ Quick Start (5 Minutes)
 
 ```bash
-# Clone and enter
+# Clone the repo
+git clone https://github.com/MSKazemi/MCP-LBDA.git
 cd MCP-LBDA
 
 # Create and activate virtual environment
@@ -78,21 +79,29 @@ All docs include simple explanations. Code examples have inline comments.
 
 ## 📖 Learning Path
 
-Follow this order for best results:
+Read the docs first to build context, then do hands-on work.
+
+### Phase 1 – Read the docs
+
+| # | Doc | Topic |
+|---|-----|-------|
+| 1 | [01-introduction](docs/01-introduction.md) | What problem does MCP solve? |
+| 2 | [02-core-concepts](docs/02-core-concepts.md) | Tools, resources, prompts |
+| 3 | [03-architecture](docs/03-architecture.md) | Request flow, transport |
+| 4 | [04-fastmcp](docs/04-fastmcp.md) | MCP vs FastMCP |
+| 5 | [05-ide-setup](docs/05-ide-setup.md) | Add MCP to VS Code / Cursor |
+
+### Phase 2 – Hands-on
 
 | # | Step | What to do |
 |---|------|------------|
-| 1 | **Read** | [01-introduction](docs/01-introduction.md) – What problem does MCP solve? |
-| 2 | **Run** | [examples/01-calculator](examples/01-calculator) – Server + client |
-| 2b | **Demo** | [examples/01-calculator/demo.py](examples/01-calculator/demo.py) – Full loop (fake LLM) |
-| 3 | **Read** | [02-core-concepts](docs/02-core-concepts.md) – Tools, resources, prompts |
-| 4 | **Run** | [examples/02-calculator-advanced](examples/02-calculator-advanced) – STDIO, resources, prompts |
-| 5 | **Run** | [examples/03-file-reader](examples/03-file-reader) – File I/O |
-| 6 | **Read** | [03-architecture](docs/03-architecture.md) – Request flow |
-| 7 | **Run** | [examples/04-sqlite-tool](examples/04-sqlite-tool) – Database |
-| 8 | **Read** | [04-fastmcp](docs/04-fastmcp.md) – What FastMCP hides |
-| 9 | **Setup** | [05-ide-setup](docs/05-ide-setup.md) – Add MCP to VS Code / Cursor |
-| 10 | **Practice** | [exercises/](exercises/) – Build your own tools |
+| 6 | **Run** | [examples/01-calculator](examples/01-calculator) – Server + client |
+| 7 | **Demo** | [examples/01-calculator/demo.py](examples/01-calculator/demo.py) – Full loop (fake LLM) |
+| 8 | **Run** | [examples/02-calculator-advanced](examples/02-calculator-advanced) – STDIO, resources, prompts |
+| 9 | **Run** | [examples/03-file-reader](examples/03-file-reader) – File I/O |
+| 10 | **Run** | [examples/04-sqlite-tool](examples/04-sqlite-tool) – Database |
+| 11 | **Setup** | Add MCP to your IDE ([05-ide-setup](docs/05-ide-setup.md)) |
+| 12 | **Practice** | [exercises/](exercises/) – Build your own tools |
 
 ---
 
