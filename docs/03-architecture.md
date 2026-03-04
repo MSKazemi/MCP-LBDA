@@ -101,7 +101,25 @@ flowchart TD
     L --> M[LLM Continues Reasoning]
     M --> Z[Final Response to User]
 ```
+
 ---
 
+## Going Deeper (Optional)
 
-**Next:** [04 – FastMCP Explained](04-fastmcp-explained.md)
+MCP is defined in the [Model Context Protocol specification](https://spec.modelcontextprotocol.io/). Key components:
+
+- **JSON-RPC 2.0** as the message format
+- **Initialization** handshake with capabilities
+- **Tools:** `tools/list`, `tools/call`
+- **Resources:** `resources/list`, `resources/read`
+- **Prompts:** `prompts/list`, `prompts/get`
+
+### Transport Options
+
+| Transport | Protocol | Use Case |
+|-----------|----------|----------|
+| stdio | stdin/stdout | Local CLI, Claude Desktop |
+| HTTP + SSE | HTTP with Server-Sent Events | Remote servers, web clients |
+| HTTP (streamable) | HTTP POST | Simple request-response |
+
+**Next:** [04 – FastMCP Explained](04-fastmcp.md)

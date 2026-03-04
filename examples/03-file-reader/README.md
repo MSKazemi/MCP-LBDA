@@ -1,4 +1,4 @@
-# Example 02 – File Reader
+# Example 03 – File Reader
 
 MCP server and client for reading files.
 
